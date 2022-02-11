@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+    <div class="alert alert-dark mt-3" th:if="${msg != null}"
+         th:text="${msg}" ></div>
+    <div class="card" th:if="${msg == null}">
+        <div class="card text-white bg-dark mt-3">
+            <p class="text-white">Cadastrar Cliente</p>
+        </div>
+
+        <!--th:href="@{/banco/excluir/(id=${banco.id})}"-->
+        <div class="card-body mt-3">
+            <form method="GET">
+                <div class="form-group mb-3">
+                    <label>Banco</label>
+                    <select class="form-select" name="listaBancos" th:field="*{listaBancos}" id="idbanco">
+                        <option th:each="banco: ${listaBancos}"
+                                th:value="${banco.id}"
+                                th:text="${banco.nome}"/>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-dark" onclick="pesquisarClientes()">Listar
+                    Clientes</button>
+            </form>
+        </div>
+    </div>
+
+
+ <div th:if="${not #lists.isEmpty(listaClientes)}" id="clientesdobanco">
+
+     <table class="table table-striped">
+         <thead>
+         <tr>
+             <th>Nome</th>
+         </tr>
+         </thead>
+
+         <tbody>
+
+            <h1 id="hh">Banco</h1>
+
+
+         <tr th:each="cliente : ${listaClientes}">
+             <td th:text="${cliente.nome}"></td>
+
+             <td><a class="btn btn-dark btn-sm"
+                    th:href="@{/cliente/cadastrar(id=${cliente.id})}">Alterar</a>
+
+
+                 <a type="button" class="btn btn-danger btn-sm"
+                    data-bs-toggle="modal" th:attr="data-bs-target='#staticBackdrop'+${cliente.id}">
+                     Excluir</a>
+                 <div class="modal fade" th:id="staticBackdrop+${cliente.id}"
+                      data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                     <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <h5 class="modal-title" id="staticBackdropLabel">Excluir Cliente</h5>
+                                 <a type="button" class="btn-close"
+                                    data-bs-dismiss="modal" aria-label="Close"></a>
+                             </div>
+                             <div class="modal-body">Você tem certeza de que quer excluir este cliente?</div>
+                             <div class="modal-footer">
+                                 <a type="button" class="btn btn-dark"
+                                    data-bs-dismiss="modal">Cancelar</a>
+                                 <a type="submit" class="btn btn-danger" th:href="@{/cliente/excluir/(id=${cliente.id})}">Confirmar Exclusão</a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+             </td>
+
+         </tr>
+         </tbody>
+
+     </table>
+
+ </div>
+
+</div>
+
+    <div layout:fragment="scripts">
+
+        <script>
+            	function pesquisarClientes() {
+				    var select = document.getElementById('idbanco');
+				    var option = select.options[select.selectedIndex];
+
+				    console.log(option.value);
+				    console.log(option.text);
+
+				    httpRequest = new XMLHttpRequest();
+				    httpRequest.onreadystatechange = function(){
+
+				        document.getElementById("hh").textContent = document.getElementById("hh").innerHTML;
+
+				    };
+				    var url = 'http://localhost:8080/cliente/listar?idBanco=' + option.value;
+				    //var url = 'http://localhost:8080/cliente/listar?idBanco=2';
+                    //var opt = 'id=' + option.value;
+				    httpRequest.open('GET', url, true);
+                    httpRequest.send(null);
+                    // processar a resposta do servidor
+                    console.log("Requisição feita");
+                };
+        </script>
+    </div>
+</div>
+
+</html>
+
