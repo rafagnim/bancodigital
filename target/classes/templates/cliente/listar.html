@@ -9,27 +9,26 @@
          th:text="${msg}" ></div>
     <div class="card" th:if="${msg == null}">
         <div class="card text-white bg-dark mt-3">
-            <p class="text-white">Cadastrar Cliente</p>
+            <p class="text-white">Listar Clientes</p>
         </div>
 
-        <!--th:href="@{/banco/excluir/(id=${banco.id})}"-->
         <div class="card-body mt-3">
             <form method="GET">
                 <div class="form-group mb-3">
                     <label>Banco</label>
-                    <select class="form-select" name="listaBancos" th:field="*{listaBancos}" id="idbanco">
+                    <select onchange="constroiBotaoPesquisa()" class="form-select" name="listaBancos" id="idbanco">
                         <option th:each="banco: ${listaBancos}"
                                 th:value="${banco.id}"
-                                th:text="${banco.nome}"/>
+                                th:text="${banco.nome}"
+                                th:selected="${banco.id == idselected}"
+                                />
                     </select>
                 </div>
-
-                <button type="submit" class="btn btn-dark" onclick="pesquisarClientes()">Listar
-                    Clientes</button>
+                <a class="btn btn-dark" id="buscarclientes" th:href="@{/cliente/listar?idBanco=1}">Listar
+                    Clientes</a>
             </form>
         </div>
     </div>
-
 
  <div th:if="${not #lists.isEmpty(listaClientes)}" id="clientesdobanco">
 
@@ -89,27 +88,12 @@
     <div layout:fragment="scripts">
 
         <script>
-            	function pesquisarClientes() {
-				    var select = document.getElementById('idbanco');
+                 function constroiBotaoPesquisa() {
+                    var select = document.getElementById("idbanco");
 				    var option = select.options[select.selectedIndex];
-
-				    console.log(option.value);
-				    console.log(option.text);
-
-				    httpRequest = new XMLHttpRequest();
-				    httpRequest.onreadystatechange = function(){
-
-				        document.getElementById("hh").textContent = document.getElementById("hh").innerHTML;
-
-				    };
-				    var url = 'http://localhost:8080/cliente/listar?idBanco=' + option.value;
-				    //var url = 'http://localhost:8080/cliente/listar?idBanco=2';
-                    //var opt = 'id=' + option.value;
-				    httpRequest.open('GET', url, true);
-                    httpRequest.send(null);
-                    // processar a resposta do servidor
-                    console.log("Requisição feita");
-                };
+                    var e = document.getElementById("buscarclientes");
+                    e.innerHTML = '<a class="btn btn-dark" id="buscarclientes" href="/cliente/listar?idBanco=' + option.value + '">Listar Clientes</a>';
+                 };
         </script>
     </div>
 </div>

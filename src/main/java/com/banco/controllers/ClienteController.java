@@ -67,8 +67,8 @@ public class ClienteController {
     public ModelAndView listarClientes(@RequestParam(required = false) Long idBanco) {
         ModelAndView mv = new ModelAndView("cliente/listar.html");
         if (idBanco != null) {
-            System.out.println("Fui chamado!" + idBanco);
             mv.addObject("listaClientes", cService.listaClientesPorIdBanco(idBanco));
+            mv.addObject("idselected", idBanco);
         }
         List<Banco> bancos = bService.listaBancos();
         mv.addObject("listaBancos", bancos);
