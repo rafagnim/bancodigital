@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+    <div class="alert alert-dark mt-3" th:if="${msg != null}"
+         th:text="${msg}" ></div>
+    <div class="card" th:if="${msg == null}">
+        <div class="card text-white bg-dark mt-3">
+            <p class="text-white">Listar Contas</p>
+        </div>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(listaContas)}">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Cliente:</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td th:text="${cliente.nome}"></td>
+            </tr>
+            </tbody>
+
+        </table>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Agencia</th>
+                <th>Tipo de Conta</th>
+                <th>Numero</th>
+                <th>Saldo</th>
+                <th>Situação</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="conta : ${listaContas}">
+                <td th:text="${conta.agencia}"></td>
+                <td th:text="${conta.tipo}"></td>
+                <td th:text="${conta.numero}"></td>
+                <td th:text="'R$ ' + ${#numbers.formatDecimal(conta.saldo, 0, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${conta.ativa ? 'Ativa' : 'Encerrada'}"></td>
+
+
+                <td>
+                    <div th:if="${conta.ativa}">
+                        <a class="btn btn-dark btn-sm"
+                           th:href="@{/conta/movimentar(numero=${conta.numero})}">Movimentar/Consultar Lançamentos</a>
+
+                        <a type="button" class="btn btn-danger btn-sm"
+                           data-bs-toggle="modal" th:attr="data-bs-target='#staticBackdrop'+${conta.numero}">
+                            Encerrar</a>
+                    </div>
+
+                    <div class="modal fade" th:id="staticBackdrop+${conta.numero}"
+                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Excluir Conta</h5>
+                                    <a type="button" class="btn-close"
+                                       data-bs-dismiss="modal" aria-label="Close"></a>
+                                </div>
+                                <div class="modal-body">Você tem certeza de que quer encerrar esta conta?</div>
+                                <div class="modal-footer">
+                                    <a type="button" class="btn btn-dark"
+                                       data-bs-dismiss="modal">Cancelar</a>
+                                    <a type="submit" class="btn btn-danger" th:href="@{/conta/encerrar/(id=${conta.numero})}">Confirmar Encerramento</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div layout:fragment="scripts">
+
+    <script>
+
+        </script>
+</div>
+</div>
+
+</html>

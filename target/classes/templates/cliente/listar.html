@@ -41,15 +41,17 @@
 
          <tbody>
 
-            <h1 id="hh">Banco</h1>
-
-
          <tr th:each="cliente : ${listaClientes}">
              <td th:text="${cliente.nome}"></td>
 
              <td><a class="btn btn-dark btn-sm"
                     th:href="@{/cliente/cadastrar(id=${cliente.id})}">Alterar</a>
 
+                 <a class="btn btn-dark btn-sm"
+                    th:href="@{/conta/cadastrar(idCliente=${cliente.id})}">Cadastrar Conta</a>
+
+                 <a class="btn btn-dark btn-sm"
+                    th:href="@{/conta/listar(idCliente=${cliente.id})}">Listar Contas</a>
 
                  <a type="button" class="btn btn-danger btn-sm"
                     data-bs-toggle="modal" th:attr="data-bs-target='#staticBackdrop'+${cliente.id}">

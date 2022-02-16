@@ -54,7 +54,7 @@ public class ClienteController {
 
     @RequestMapping(method = RequestMethod.POST, path = "cadastrar")
     public ModelAndView cadastrarCliente(Cliente c, RedirectAttributes redirectAttributes) {
-        ModelAndView mv = new ModelAndView("redirect:/cliente");
+        ModelAndView mv = new ModelAndView("redirect:/cliente/listar");
 
         cService.addCliente(c);
 
