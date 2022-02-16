@@ -1,6 +1,7 @@
 package com.banco.entities;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Lancamento {
@@ -12,16 +13,18 @@ public class Lancamento {
     private Long contaorigem;
     private Long contadestino;
     private String tipo;
+    private LocalDate data;
 
     public Lancamento() {
     }
 
-    public Lancamento(Long id, double valor, Long contaorigem, Long contadestino, String tipo) {
+    public Lancamento(Long id, double valor, Long contaorigem, Long contadestino, String tipo, LocalDate data) {
         this.id = id;
         this.valor = valor;
         this.contaorigem = contaorigem;
         this.contadestino = contadestino;
         this.tipo = tipo;
+        this.data = data;
     }
 
     public Long getId() {
@@ -64,14 +67,11 @@ public class Lancamento {
         this.tipo = tipo;
     }
 
-    @Override
-    public String toString() {
-        return "Lancamento{" +
-                "id=" + id +
-                ", valor=" + valor +
-                ", contaorigem=" + contaorigem +
-                ", contadestino=" + contadestino +
-                ", tipo='" + tipo + '\'' +
-                '}';
+    public LocalDate getData() {
+        return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 }

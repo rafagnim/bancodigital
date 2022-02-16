@@ -9,11 +9,15 @@
     <div class="alert alert-dark mt-3"
          th:if="${#lists.isEmpty(listaBancos)}">Nenhum banco
         cadastrado</div>
+
     <div class="alert alert-dark mt-3" th:if="${msg != null}"
          th:text="${msg}"></div>
+    <div class="card" th:if="${not #lists.isEmpty(listaBancos)}">
+    <div class="card text-white bg-dark p-1 text-center">
+        <p class="text-white">Bancos Cadastrados</p>
+    </div>
 
-
-    <div th:if="${not #lists.isEmpty(listaBancos)}">
+    <div>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -59,7 +63,7 @@
             </tbody>
 
         </table>
-
+    </div>
     </div>
 
 </div>

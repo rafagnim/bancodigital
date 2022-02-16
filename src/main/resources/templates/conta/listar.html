@@ -8,7 +8,7 @@
     <div class="alert alert-dark mt-3" th:if="${msg != null}"
          th:text="${msg}" ></div>
     <div class="card" th:if="${msg == null}">
-        <div class="card text-white bg-dark mt-3">
+        <div class="card text-white bg-dark p-1 text-center">
             <p class="text-white">Listar Contas</p>
         </div>
     </div>
@@ -51,9 +51,15 @@
 
 
                 <td>
+                    <a class="btn btn-dark btn-sm"
+                       th:href="@{/conta/extrato(numero=${conta.numero})}">Extrato</a>
+                </td>
+
+                <td>
                     <div th:if="${conta.ativa}">
                         <a class="btn btn-dark btn-sm"
                            th:href="@{/conta/movimentar(numero=${conta.numero})}">Movimentar/Consultar Lançamentos</a>
+
 
                         <a type="button" class="btn btn-danger btn-sm"
                            data-bs-toggle="modal" th:attr="data-bs-target='#staticBackdrop'+${conta.numero}">

@@ -78,7 +78,7 @@ public class ClienteController {
 
     @RequestMapping(path = "excluir")
     public ModelAndView delCliente(@RequestParam Long id, RedirectAttributes redirectAttributes) {
-        ModelAndView mv = new ModelAndView("redirect:/cliente");
+        ModelAndView mv = new ModelAndView("redirect:/cliente/listar");
         Cliente c = new Cliente();
         try {
             c = cService.delCliente(id);

@@ -3,6 +3,7 @@ package com.banco.controllers;
 import com.banco.Enums.TipoConta;
 import com.banco.dto.ContaDtoCadastro;
 import com.banco.dto.ContaDtoConsulta;
+import com.banco.dto.LancamentoDto;
 import com.banco.dto.MapperContaDto;
 import com.banco.entities.*;
 import com.banco.services.ClienteService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "conta")
@@ -92,7 +95,7 @@ public class ContaController {
     public ModelAndView movimentarConta(Lancamento lancamento) {
         System.out.println(lancamento);
         ModelAndView mv = new ModelAndView("conta/confirmacaomovimentacao.html");
-        if (lancamento.getContaorigem() == lancamento.getContadestino()) {
+        if (lancamento.getContaorigem().equals(lancamento.getContadestino())) {
             mv.addObject("msg", "Não é possível transferir para a mesma conta. Refaça a transação.");
             return mv;
         } else if (lancamento.getContadestino() != null && !lancamento.getTipo().equals("transferencia")) {
@@ -140,11 +143,23 @@ public class ContaController {
         Conta c;
         try {
             c = contaService.encerrarConta(id);
-            redirectAttributes.addFlashAttribute("msg", "Conta encerrada com sucesso.");
+            redirectAttributes.addFlashAttribute("msg", "Conta número " + c.getId() + " encerrada com sucesso.");
 
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
+        return mv;
+    }
+
+    @RequestMapping(path = "extrato")
+    public ModelAndView extrato(@RequestParam Long numero) {
+        ModelAndView mv = new ModelAndView("conta/extrato.html");
+        List<LancamentoDto> lancamentos = lancamentoService.extratoConta(numero);
+        if (lancamentos.isEmpty()) mv.addObject("msg", "Conta sem movimentação.");
+        mv.addObject("saldo", contaService.getConta(numero).getSaldo());
+        mv.addObject("contaorigem", numero);
+        mv.addObject("lancamentos", lancamentos);
+        mv.addObject("clientenome", clienteService.getCliente(contaService.getConta(numero).getCliente().getId()).getNome());
         return mv;
     }
 }
